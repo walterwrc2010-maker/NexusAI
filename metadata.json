@@ -1,0 +1,8 @@
+{
+  "name": "NexusAI - Sales & Automations",
+  "description": "Uma landing page de alto impacto para agência de automação e agentes de IA, focada em converter leads através de tecnologia de ponta e demonstrações interativas.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
