@@ -42,6 +42,45 @@ function App() {
         </div>
 
         <Services />
+        <section className="py-16 bg-slate-950 border-t border-white/5">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10">
+              <h3 className="text-2xl md:text-3xl font-extrabold">
+                Exemplos <span className="text-indigo-400">na prática</span>
+              </h3>
+              <p className="text-slate-400 mt-3 max-w-2xl mx-auto">
+                Ideias reais de automação que implementamos com agentes e n8n.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="p-8 rounded-3xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all">
+                <p className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3">Atendimento</p>
+                <h4 className="text-lg font-bold mb-3">WhatsApp 24/7 com contexto</h4>
+                <p className="text-slate-400 leading-relaxed">
+                  Responde dúvidas, coleta dados, encaminha para humano e registra tudo (sem perder conversas).
+                </p>
+              </div>
+
+              <div className="p-8 rounded-3xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all">
+                <p className="text-xs font-bold uppercase tracking-widest text-purple-400 mb-3">n8n</p>
+                <h4 className="text-lg font-bold mb-3">Lead → CRM → Alertas</h4>
+                <p className="text-slate-400 leading-relaxed">
+                  Cada lead vira registro no CRM/planilha, dispara alertas e inicia follow-up automático.
+                </p>
+              </div>
+
+              <div className="p-8 rounded-3xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all">
+                <p className="text-xs font-bold uppercase tracking-widest text-pink-400 mb-3">Vendas</p>
+                <h4 className="text-lg font-bold mb-3">Qualificação e agendamento</h4>
+                <p className="text-slate-400 leading-relaxed">
+                  O agente faz perguntas certas, classifica o lead e agenda reunião com horário disponível.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <AboutAgents />
         <Process />
         <AgentDemo />
