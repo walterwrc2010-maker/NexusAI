@@ -1,40 +1,37 @@
-
-import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ChatMessage } from "../types";
 
 export class GeminiService {
-  private model: string = 'gemini-3-flash-preview';
+  private model = "gemini-2.0-flash";
 
   async generateResponse(history: ChatMessage[]): Promise<string> {
-    // ALWAYS create a new GoogleGenAI instance right before making an API call to ensure it uses the most up-to-date API key.
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+    if (!apiKey || apiKey === 'PLACEHOLDER_API_KEY') {
+      console.error("VITE_GEMINI_API_KEY não configurada corretamente");
+      return "⚠️ Configuração necessária: Adicione sua chave de API do Google Gemini no arquivo .env.local";
+    }
+
+    const ai = new GoogleGenerativeAI(apiKey);
+    const model = ai.getGenerativeModel({ model: this.model });
 
     try {
-      const contents = history.map(msg => ({
-        role: msg.role === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.content }]
-      }));
+      const lastMessage = history[history.length - 1];
 
-      // Use ai.models.generateContent with both model and contents/config in a single call.
-      const response: GenerateContentResponse = await ai.models.generateContent({
-        model: this.model,
-        contents: contents,
-        config: {
-          systemInstruction: `Você é o Agente Consultor da NexusAI, uma agência especializada em agentes de IA e automação de workflows.
-          Sua missão é explicar como agentes de IA são diferentes de chatbots comuns.
-          - Chatbots comuns apenas respondem perguntas baseadas em regras.
-          - Agentes de IA são autônomos, podem usar ferramentas, tomar decisões, pesquisar na web e executar tarefas complexas.
-          Seja profissional, inovador e persuasivo. Fale sobre ganhos de produtividade e ROI.
-          Sempre convide o usuário para agendar uma demonstração gratuita no botão abaixo do chat.`,
-          temperature: 0.7,
-        },
-      });
+      const result = await model.generateContent(`
+Você é o Agente Consultor da NexusAI.
 
-      // The .text property is a getter that returns the extracted string; do not call it as a method.
-      return response.text || "Desculpe, tive um problema técnico. Pode tentar novamente?";
+Explique automações com agentes de IA de forma clara e profissional.
+Sempre incentive o agendamento de uma demonstração gratuita.
+
+Pergunta do cliente:
+${lastMessage.content}
+      `);
+
+      return result.response.text();
     } catch (error) {
       console.error("Gemini API Error:", error);
-      return "Estou com dificuldade de conexão agora, mas adoraria conversar sobre como automatizar sua empresa!";
+      return "Estou com dificuldade de conexão agora, mas posso te explicar como automatizar sua empresa com agentes e n8n!";
     }
   }
 }
