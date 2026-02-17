@@ -41,85 +41,70 @@ function App() {
           </div>
         </div>
 
-        <Services />
-        <section className="py-16 bg-slate-950 border-t border-white/5">
+        <Services /><section className="py-16 bg-slate-950 border-t border-white/5">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-10">
               <h3 className="text-2xl md:text-3xl font-extrabold">
                 Exemplos <span className="text-indigo-400">na prática</span>
               </h3>
               <p className="text-slate-400 mt-3 max-w-2xl mx-auto">
-                Ideias reais de automação que implementamos com agentes e n8n.
+                Automação real com agentes de IA e workflows n8n.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+              {/* WhatsApp */}
               <div className="p-8 rounded-3xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all">
-                <p className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3">Atendimento</p>
-                <h4 className="text-lg font-bold mb-3">WhatsApp 24/7 com contexto</h4>
+                <p className="text-xs font-bold uppercase tracking-widest text-green-400 mb-3">
+                  Atendimento
+                </p>
+
+                <h4 className="text-lg font-bold mb-3 flex items-center gap-2">
+                  <span className="text-green-400 text-xl">●</span>
+                  WhatsApp 24/7 com contexto
+                </h4>
+
                 <p className="text-slate-400 leading-relaxed">
-                  Responde dúvidas, coleta dados, encaminha para humano e registra tudo (sem perder conversas).
+                  Responde clientes automaticamente, coleta informações e registra
+                  conversas sem perder histórico.
                 </p>
               </div>
 
+              {/* n8n */}
               <div className="p-8 rounded-3xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all">
-                <p className="text-xs font-bold uppercase tracking-widest text-purple-400 mb-3">n8n</p>
-                <h4 className="text-lg font-bold mb-3">Lead → CRM → Alertas</h4>
+                <p className="text-xs font-bold uppercase tracking-widest text-orange-400 mb-3">
+                  n8n
+                </p>
+
+                <h4 className="text-lg font-bold mb-3 flex items-center gap-2">
+                  <span className="text-orange-400 text-xl">●</span>
+                  Automação com n8n
+                </h4>
+
                 <p className="text-slate-400 leading-relaxed">
-                  Cada lead vira registro no CRM/planilha, dispara alertas e inicia follow-up automático.
+                  Lead entra → CRM registra → planilha atualiza → equipe recebe alerta
+                  automaticamente.
                 </p>
               </div>
 
+              {/* vendas */}
               <div className="p-8 rounded-3xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-all">
-                <p className="text-xs font-bold uppercase tracking-widest text-pink-400 mb-3">Vendas</p>
-                <h4 className="text-lg font-bold mb-3">Qualificação e agendamento</h4>
+                <p className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-3">
+                  Vendas
+                </p>
+
+                <h4 className="text-lg font-bold mb-3 flex items-center gap-2">
+                  <span className="text-indigo-400 text-xl">●</span>
+                  Qualificação e agendamento
+                </h4>
+
                 <p className="text-slate-400 leading-relaxed">
-                  O agente faz perguntas certas, classifica o lead e agenda reunião com horário disponível.
+                  O agente qualifica o lead, faz perguntas e agenda reunião
+                  automaticamente.
                 </p>
               </div>
-            </div>
-          </div>
-        </section>
 
-        <AboutAgents />
-        <Process />
-        <AgentDemo />
-        <Testimonials />
-        <FAQ />
-
-        {/* Final CTA Section */}
-        <section id="contact" className="py-32 relative overflow-hidden">
-          {/* Decorative radial gradient */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-indigo-600/10 blur-[150px] rounded-full -z-10"></div>
-
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <div className="inline-block p-1 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-500 mb-8">
-              <div className="bg-slate-950 px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest text-indigo-400">
-                Últimas Vagas para Consultoria este Mês
-              </div>
-            </div>
-
-            <h2 className="text-4xl md:text-6xl font-extrabold mb-8 leading-tight">
-              A revolução não espera. <br />
-              Sua <span className="gradient-text">automação</span> começa aqui.
-            </h2>
-            <p className="text-slate-400 mb-12 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-              Agende uma consultoria estratégica gratuita e descubra como a NexusAI pode economizar centenas de horas na sua empresa todos os meses através de Agentes e Workflows.
-            </p>
-
-            <div className="flex flex-col sm:flex-row justify-center gap-6">
-              <a
-                href="https://wa.me/seu-numero"
-                className="px-10 py-5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl transition-all shadow-2xl shadow-indigo-500/40 transform hover:scale-105"
-              >
-                Agendar Diagnóstico Gratuito
-              </a>
-              <a
-                href="#demo"
-                className="px-10 py-5 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold rounded-2xl transition-all"
-              >
-                Falar com o Agente Agora
-              </a>
             </div>
           </div>
         </section>
