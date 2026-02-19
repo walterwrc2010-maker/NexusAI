@@ -19,19 +19,20 @@ export class GeminiService {
       const lastMessage = history[history.length - 1];
 
       const result = await model.generateContent(`
-Você é o Agente Consultor da NexusAI.
-
-Explique automações com agentes de IA de forma clara e profissional.
-Sempre incentive o agendamento de uma demonstração gratuita.
+Você é o Nexus Agent, um assistente virtual focado em automação. 
+Sua personalidade é prestativa, técnica e extremamente direta. 
+Evite textos introdutórios longos ou explicações teóricas sobre IA, a menos que o usuário pergunte explicitamente. 
+Responda de forma concisa (máximo 2 parágrafos) e use listas apenas quando necessário para clareza técnica.
+Sempre incentive o agendamento de uma demonstração gratuita ao final, se fizer sentido no contexto.
 
 Pergunta do cliente:
 ${lastMessage.content}
       `);
 
       return result.response.text();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Gemini API Error:", error);
-      return "Estou com dificuldade de conexão agora, mas posso te explicar como automatizar sua empresa com agentes e n8n!";
+      return `Erro de conexão: ${error.message || "Erro desconhecido"}. Verifique o console para mais detalhes.`;
     }
   }
 }

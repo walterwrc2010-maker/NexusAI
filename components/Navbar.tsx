@@ -1,101 +1,158 @@
+import React, { useState, useEffect } from 'react';
+import { Menu, X, Bot, ChevronRight, MessageCircle } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { cn } from '../lib/utils';
+import { motion, AnimatePresence } from 'framer-motion';
 
-import React, { useState } from 'react';
-
-const Navbar: React.FC = () => {
+export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Helper to handle anchor links on different pages
+  const getLink = (href: string) => {
+    if (href.startsWith('#')) {
+      return location.pathname === '/' ? href : `/${href}`;
+    }
+    return href;
+  };
 
   const navLinks = [
-    { name: 'Serviços', href: '#services' },
-    { name: 'Agentes de IA', href: '#about-agents' },
-    { name: 'Cases', href: '#testimonials' },
+    { name: 'Soluções', href: '/#services' },
+    { name: 'Agentes', href: '/#about-agents' },
+    { name: 'Processo', href: '/#process' },
+    { name: 'Depoimentos', href: '/#testimonials' },
   ];
 
-  const whatsappNumber = '5511999999999'; // troque pelo seu
-  const whatsappText = encodeURIComponent('Olá! Quero um Agente de IA para meu negócio.');
-  const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappText}`;
-
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-md">
+    <nav
+      className={cn(
+        "fixed w-full z-50 transition-all duration-300 border-b border-transparent",
+        scrolled ? "bg-slate-950/80 backdrop-blur-md border-white/10 py-4" : "bg-transparent py-6"
+      )}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/30">
-              N
+        <div className="flex justify-between items-center">
+
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 group">
+            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 group-hover:scale-105 transition-transform duration-300 shadow-lg shadow-indigo-500/20">
+              <Bot className="w-6 h-6 text-white" />
+              <div className="absolute inset-0 rounded-xl bg-white/20 blur-sm opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-            <span className="text-xl font-extrabold tracking-tight">Nexus<span className="text-indigo-500">AI</span></span>
-          </div>
+            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400 group-hover:to-white transition-all">
+              NexusAI
+            </span>
+          </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
+            <Link
+              to="/chat"
+              className="px-4 py-2 rounded-lg bg-indigo-500/10 border border-indigo-500/30 hover:bg-indigo-500/20 hover:border-indigo-500/50 text-indigo-300 font-semibold transition-all shadow-[0_0_15px_rgba(99,102,241,0.3)] hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] flex items-center gap-2"
+            >
+              <Bot className="w-4 h-4" />
+              CHAT DEMO
+            </Link>
+
+            <Link
+              to="/leads"
+              className="text-sm font-medium text-slate-400 hover:text-white transition-colors relative group"
+            >
+              Contato
+              <span className="absolute -bottom-1 left-0 w-0 h-px bg-indigo-500 transition-all duration-300 group-hover:w-full" />
+            </Link>
+
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="text-sm font-medium text-slate-300 hover:text-indigo-400 transition-colors"
+                className="text-sm font-medium text-slate-400 hover:text-white transition-colors relative group"
               >
                 {link.name}
+                <span className="absolute -bottom-1 left-0 w-0 h-px bg-indigo-500 transition-all duration-300 group-hover:w-full" />
               </a>
             ))}
+
             <a
-              href="#contact"
-              className="px-5 py-2 rounded-full bg-indigo-600 hover:bg-indigo-700 text-sm font-semibold text-white transition-all shadow-lg shadow-indigo-500/20"
+              href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20a%20NexusAI."
+              target="_blank"
+              rel="noreferrer"
+              className="px-5 py-2.5 rounded-lg bg-green-600 hover:bg-green-500 text-white text-sm font-bold transition-all flex items-center gap-2 group shadow-lg shadow-green-500/20"
             >
-              Falar com Consultor
+              <MessageCircle className="w-4 h-4 fill-white text-white" />
+              Agendar Diagnóstico
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-slate-300 p-2 hover:text-white transition-all duration-300"
-              aria-label="Menu"
-            >
-              <div className="relative w-6 h-6">
-                <span className={`absolute block h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${isOpen ? 'rotate-45 translate-y-0' : '-translate-y-1.5'}`}></span>
-                <span className={`absolute block h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${isOpen ? 'opacity-0' : 'opacity-100'}`}></span>
-                <span className={`absolute block h-0.5 w-6 bg-current transform transition duration-300 ease-in-out ${isOpen ? '-rotate-45 translate-y-0' : 'translate-y-1.5'}`}></span>
-              </div>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Menu Content with Slide and Fade */}
-      <div
-        className={`md:hidden grid transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-          }`}
-      >
-        <div className="min-h-0">
-          <div
-            className={`px-4 pt-2 pb-6 space-y-1 bg-slate-950 border-t border-white/5 transition-transform duration-500 ${isOpen ? 'translate-y-0' : '-translate-y-4'
-              }`}
+          {/* Mobile Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
           >
-            {navLinks.map((link, idx) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                style={{ transitionDelay: `${idx * 50}ms` }}
-                className={`block px-3 py-4 text-base font-medium text-slate-300 hover:text-indigo-400 hover:bg-white/5 rounded-lg transition-all duration-300 ${isOpen ? 'translate-x-0 opacity-100' : '-translate-x-2 opacity-0'
-                  }`}
-              >
-                {link.name}
-              </a>
-            ))}
-            <a
-              href="#contact"
-              onClick={() => setIsOpen(false)}
-              className={`block px-3 py-4 text-base font-bold text-indigo-400 transition-all duration-300 delay-150 ${isOpen ? 'translate-x-0 opacity-100' : '-translate-x-2 opacity-0'
-                }`}
-            >
-              Falar com Consultor
-            </a>
-          </div>
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-slate-950/95 backdrop-blur-xl border-b border-white/10 overflow-hidden"
+          >
+            <div className="px-4 py-8 space-y-4">
+              <Link
+                to="/chat"
+                onClick={() => setIsOpen(false)}
+                className="block text-lg font-bold text-indigo-400 hover:text-indigo-300 hover:pl-2 transition-all"
+              >
+                CHAT DEMO ✨
+              </Link>
+              <Link
+                to="/leads"
+                onClick={() => setIsOpen(false)}
+                className="block text-lg font-medium text-slate-400 hover:text-white hover:pl-2 transition-all"
+              >
+                Contato / Leads
+              </Link>
+
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className="block text-lg font-medium text-slate-400 hover:text-white hover:pl-2 transition-all"
+                >
+                  {link.name}
+                </a>
+              ))}
+              <hr className="border-white/10" />
+              <a
+                href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20a%20NexusAI."
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-green-600 text-white font-bold hover:bg-green-500 transition-colors shadow-lg shadow-green-500/20"
+              >
+                <MessageCircle className="w-5 h-5 fill-white text-white" />
+                Agendar Diagnóstico
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
-};
-
-export default Navbar;
+}

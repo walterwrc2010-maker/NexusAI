@@ -1,6 +1,4 @@
 
-import React from 'react';
-
 export interface Service {
   id: string;
   title: string;
@@ -19,6 +17,7 @@ export interface Testimonial {
 }
 
 export interface ChatMessage {
+  id: string;
   role: 'user' | 'model';
   content: string;
 }

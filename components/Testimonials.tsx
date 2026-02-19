@@ -1,55 +1,60 @@
-
 import React from 'react';
+import { Star, Quote } from 'lucide-react';
 
-const testimonials = [
-  {
-    name: "Ricardo Oliveira",
-    role: "CEO na TechScale",
-    content: "Implementamos um agente de qualificação de leads e nosso custo por lead qualificado caiu 40% no primeiro mês. Inacreditável.",
-    avatar: "RO"
-  },
-  {
-    name: "Mariana Costa",
-    role: "Diretora de Operações",
-    content: "Os workflows automatizados da NexusAI economizam mais de 60 horas por mês para meu time de suporte. Atendimento 24h sem erros.",
-    avatar: "MC"
-  },
-  {
-    name: "Carlos Mendes",
-    role: "Fundador da GrowAgency",
-    content: "A Nexus não entrega apenas tecnologia, eles entregam estratégia. Nossos agentes agora tomam decisões que antes exigiam um gestor.",
-    avatar: "CM"
-  }
-];
+export default function Testimonials() {
+  const testimonials = [
+    {
+      text: "Nossa eficiência aumentou 300% desde que implementamos os agentes da Nexus. O atendimento agora é imediato.",
+      author: "Carlos Mendes",
+      role: "CEO, TechGrowth",
+      stars: 5,
+    },
+    {
+      text: "A automação de qualificação de leads é perfeita. Só chegam na minha agenda clientes prontos para fechar.",
+      author: "Fernanda Lima",
+      role: "Diretora Comercial, VendaMais",
+      stars: 5,
+    },
+    {
+      text: "Custo reduzido e satisfação do cliente nas alturas. Melhor investimento que fizemos este ano.",
+      author: "Roberto Almeida",
+      role: "Founder, InovaSys",
+      stars: 5,
+    }
+  ];
 
-const Testimonials: React.FC = () => {
   return (
-    <section id="testimonials" className="py-24 bg-slate-950">
+    <section id="testimonials" className="py-24 bg-slate-950 border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">O que dizem nossos <span className="text-indigo-400">Clientes</span></h2>
-          <p className="text-slate-400">Resultados reais com inteligência aplicada.</p>
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
+            Quem usa, <span className="text-indigo-400">recomenda</span>
+          </h2>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((t, idx) => (
-            <div key={idx} className="glass-morphism p-8 rounded-3xl border border-white/5 hover:border-indigo-500/30 transition-all duration-500">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white shadow-lg">
-                  {t.avatar}
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-100">{t.name}</h4>
-                  <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">{t.role}</p>
-                </div>
+          {testimonials.map((t, i) => (
+            <div key={i} className="relative p-8 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-colors group">
+              <Quote className="absolute top-8 right-8 w-8 h-8 text-indigo-500/20 group-hover:text-indigo-500/40 transition-colors" />
+
+              <div className="flex gap-1 mb-6">
+                {[...Array(t.stars)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
+                ))}
               </div>
-              <p className="text-slate-300 leading-relaxed italic">"{t.content}"</p>
+
+              <p className="text-slate-300 text-lg leading-relaxed mb-6">
+                "{t.text}"
+              </p>
+
+              <div>
+                <p className="text-white font-bold">{t.author}</p>
+                <p className="text-indigo-400 text-sm">{t.role}</p>
+              </div>
             </div>
           ))}
         </div>
       </div>
     </section>
   );
-};
-
-export default Testimonials;
+}

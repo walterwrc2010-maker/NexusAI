@@ -1,305 +1,143 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { GeminiService } from '../services/geminiService';
-import { ChatMessage } from '../types';
+import React, { useState, useEffect, useRef } from 'react';
+import { Send, Bot, User, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '../lib/utils';
+import { useGeminiChat } from '../hooks/useGeminiChat';
 
-declare global {
-  interface Window {
-    NexusAIChatOpen?: (prefill?: string) => void;
-    NexusAIChatClose?: () => void;
-  }
-}
-
-const AgentDemo: React.FC = () => {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      role: 'model',
-      content:
-        'Olá! Sou o Agente Consultor da NexusAI. Como posso te ajudar hoje? (Atendimento, vendas, automações com n8n ou produto SaaS)',
-    },
-  ]);
-
+export default function AgentDemo() {
+  const { messages, isLoading, sendMessage } = useGeminiChat();
   const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Floating widget state
-  const [isOpen, setIsOpen] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
-
-  const chatEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  // Se você quiser que o botão "Agendar" leve pro WhatsApp real depois, troque aqui:
-  const whatsappLink = '#contact';
-
-  // Instância única do service
-  const geminiRef = useRef<GeminiService | null>(null);
-  if (!geminiRef.current) geminiRef.current = new GeminiService();
-
-  const scrollToBottom = () => chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-
-  useEffect(() => {
-    if (!isOpen || isMinimized) return;
-    scrollToBottom();
-  }, [messages, isOpen, isMinimized]);
-
-  // Expor função global pros botões do site chamarem sem quebrar nada:
-  // window.NexusAIChatOpen("texto opcional")
-  useEffect(() => {
-    window.NexusAIChatOpen = (prefill?: string) => {
-      setIsOpen(true);
-      setIsMinimized(false);
-      if (prefill) setInput(prefill);
-      setTimeout(() => inputRef.current?.focus(), 50);
-    };
-    window.NexusAIChatClose = () => setIsOpen(false);
-
-    // também aceita evento:
-    // window.dispatchEvent(new CustomEvent('nexusai:chat:open', { detail: { prefill: '...' } }))
-    const onOpen = (ev: Event) => {
-      const custom = ev as CustomEvent;
-      const prefill = custom?.detail?.prefill as string | undefined;
-      window.NexusAIChatOpen?.(prefill);
-    };
-
-    window.addEventListener('nexusai:chat:open', onOpen);
-
-    return () => {
-      delete window.NexusAIChatOpen;
-      delete window.NexusAIChatClose;
-      window.removeEventListener('nexusai:chat:open', onOpen);
-    };
-  }, []);
-
-  const handleSend = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
-
-    const userMessage: ChatMessage = { role: 'user', content: input.trim() };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput('');
-    setIsLoading(true);
-
-    const history = [...messages, userMessage];
-
-    try {
-      setHasError(false);
-      const response = await geminiRef.current!.generateResponse(history);
-      setMessages((prev) => [...prev, { role: 'model', content: response }]);
-    } catch (err) {
-      setHasError(true);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: 'model',
-          content:
-            'No momento o agente está indisponível. Tente novamente em instantes ou agende uma conversa.',
-        },
-      ]);
-    } finally {
-      setIsLoading(false);
-      setTimeout(() => inputRef.current?.focus(), 50);
-    }
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const quickPrompts = [
-    'Quero automatizar meu atendimento no WhatsApp',
-    'Quais integrações vocês fazem com CRM?',
-    'Quanto custa um agente de IA para minha empresa?',
-  ];
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isLoading]);
 
-  // ====== UI: Floating Widget ======
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
+    sendMessage(input);
+    setInput('');
+  };
+
   return (
-    <>
-      {/* Mantém a seção no site (para navegação/SEO), mas o chat real fica flutuante */}
-      <section id="agent-demo" className="py-24">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Converse com nosso <span className="text-indigo-400">Agente de Consultoria</span>
+    <section id="agent-demo" className="py-24 bg-slate-950 relative overflow-hidden">
+      {/* Background blobs */}
+      <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] -z-10" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-fuchsia-500/10 rounded-full blur-[100px] -z-10" />
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-sm font-medium mb-6">
+            <Sparkles className="w-4 h-4 text-indigo-400" />
+            <span>Teste Agora</span>
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
+            Converse com nossa <span className="text-indigo-400">IA</span>
           </h2>
-          <p className="text-slate-400">
-            Clique no ícone de chat no canto inferior direito para abrir o agente.
+          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+            Experimente em tempo real como um agente inteligente pode interagir, qualificar e ajudar seus clientes.
           </p>
-
-          <div className="flex flex-wrap gap-3 justify-center mt-8">
-            {quickPrompts.map((q) => (
-              <button
-                key={q}
-                onClick={() => window.NexusAIChatOpen?.(q)}
-                className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-slate-200 hover:bg-white/10 transition"
-                type="button"
-              >
-                {q}
-              </button>
-            ))}
-          </div>
-
-          <div className="mt-8 flex justify-center">
-            <a
-              href={whatsappLink}
-              className="px-6 py-3 bg-green-600/10 border border-green-500/30 text-green-400 rounded-full font-bold text-sm hover:bg-green-600/20 transition-all"
-            >
-              Agendar Demo Gratuita
-            </a>
-          </div>
         </div>
-      </section>
 
-      {/* BOTÃO FLUTUANTE (pequeno e elegante) */}
-      <button
-        type="button"
-        onClick={() => {
-          setIsOpen((v) => !v);
-          setIsMinimized(false);
-          setTimeout(() => inputRef.current?.focus(), 50);
-        }}
-        className="fixed bottom-5 right-5 z-[9999] w-12 h-12 rounded-full bg-indigo-600 hover:bg-indigo-500 shadow-xl flex items-center justify-center border border-white/10"
-        aria-label="Abrir chat NexusAI"
-        title="Falar com o agente"
-      >
-        {/* ícone */}
-        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-          />
-        </svg>
-
-        {/* status */}
-        <span
-          className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 border-2 border-slate-950 rounded-full ${hasError ? 'bg-yellow-500' : 'bg-green-500'
-            }`}
-          title={hasError ? 'Instável' : 'Online'}
-        />
-      </button>
-
-      {/* PAINEL FLUTUANTE */}
-      {isOpen && (
-        <div className="fixed bottom-20 right-5 z-[9999] w-[360px] max-w-[calc(100vw-2rem)] rounded-3xl overflow-hidden border border-white/10 bg-slate-950/90 backdrop-blur shadow-2xl">
-          {/* header */}
-          <div className="px-4 py-3 bg-white/5 border-b border-white/10 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-                  />
-                </svg>
-              </div>
-              <div className="leading-tight">
-                <div className="font-bold text-sm text-white">NexusAI • Agente Consultor</div>
-                <div className="text-[10px] uppercase tracking-widest font-bold text-slate-400">
-                  {hasError ? 'Instável' : 'Online'} • IA + n8n
-                </div>
-              </div>
+        <div className="relative rounded-3xl border border-white/10 bg-slate-900/50 backdrop-blur-xl shadow-2xl overflow-hidden h-[600px] flex flex-col">
+          {/* Header */}
+          <div className="p-4 border-b border-white/10 bg-white/5 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+              <Bot className="w-6 h-6 text-white" />
             </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setIsMinimized((v) => !v)}
-                className="px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-slate-200 border border-white/10"
-                title={isMinimized ? 'Expandir' : 'Minimizar'}
-              >
-                {isMinimized ? 'Expandir' : 'Minimizar'}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center"
-                aria-label="Fechar"
-                title="Fechar"
-              >
-                <svg className="w-4 h-4 text-slate-200" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+            <div>
+              <h3 className="font-bold text-white">Nexus Agent</h3>
+              <p className="text-xs text-indigo-300 flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                Online agora
+              </p>
             </div>
           </div>
 
-          {!isMinimized && (
-            <>
-              {/* quick prompts */}
-              <div className="px-4 py-3 border-b border-white/10 flex flex-wrap gap-2 bg-white/[0.03]">
-                {quickPrompts.map((q) => (
-                  <button
-                    key={q}
-                    type="button"
-                    onClick={() => {
-                      setInput(q);
-                      setTimeout(() => inputRef.current?.focus(), 50);
-                    }}
-                    className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-slate-200 hover:bg-white/10 transition"
-                  >
-                    {q}
-                  </button>
-                ))}
+          {/* Chat Area */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-thin scrollbar-thumb-indigo-500/20 scrollbar-track-transparent">
+            {messages.length === 0 && (
+              <div className="h-full flex flex-col items-center justify-center text-center opacity-50">
+                <Bot className="w-16 h-16 text-indigo-400 mb-4" />
+                <p className="text-slate-400">Diga "Olá" para começar...</p>
               </div>
+            )}
 
-              {/* messages */}
-              <div className="h-[420px] overflow-y-auto px-4 py-4 space-y-4">
-                {messages.map((msg, idx) => (
-                  <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div
-                      className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${msg.role === 'user'
-                          ? 'bg-indigo-600 text-white rounded-tr-none'
-                          : 'bg-white/10 text-slate-100 rounded-tl-none border border-white/5'
-                        }`}
-                    >
-                      {msg.content}
-                    </div>
+            <AnimatePresence initial={false}>
+              {messages.map((message) => (
+                <motion.div
+                  key={message.id}
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  className={cn(
+                    "flex items-start gap-4 max-w-[85%]",
+                    message.role === 'user' ? "ml-auto flex-row-reverse" : ""
+                  )}
+                >
+                  <div className={cn(
+                    "w-8 h-8 rounded-full flex items-center justify-center shrink-0",
+                    message.role === 'user' ? "bg-slate-700 text-slate-300" : "bg-indigo-600 text-white"
+                  )}>
+                    {message.role === 'user' ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
                   </div>
-                ))}
 
-                {isLoading && (
-                  <div className="flex justify-start">
-                    <div className="bg-white/10 px-4 py-2.5 rounded-2xl rounded-tl-none border border-white/5 flex gap-1">
-                      <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce"></div>
-                      <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce delay-100"></div>
-                      <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce delay-200"></div>
-                    </div>
+                  <div className={cn(
+                    "p-4 rounded-2xl text-sm leading-relaxed shadow-md",
+                    message.role === 'user'
+                      ? "bg-slate-800 text-slate-100 rounded-tr-none"
+                      : "bg-white/10 text-slate-100 rounded-tl-none border border-white/5"
+                  )}>
+                    {message.content}
                   </div>
-                )}
+                </motion.div>
+              ))}
+            </AnimatePresence>
 
-                <div ref={chatEndRef} />
-              </div>
-
-              {/* input */}
-              <form onSubmit={handleSend} className="p-3 bg-white/5 border-t border-white/10">
-                <div className="relative">
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="Pergunte sobre automações..."
-                    className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-sm text-slate-100"
-                  />
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-indigo-300 hover:text-indigo-200 transition-colors disabled:opacity-50"
-                    aria-label="Enviar"
-                    title="Enviar"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                    </svg>
-                  </button>
+            {isLoading && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex items-start gap-4"
+              >
+                <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center shrink-0">
+                  <Bot className="w-5 h-5 text-white" />
                 </div>
-              </form>
-            </>
-          )}
+                <div className="bg-white/10 border border-white/5 p-4 rounded-2xl rounded-tl-none flex gap-1 items-center">
+                  <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                  <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                  <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" />
+                </div>
+              </motion.div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Input Area */}
+          <div className="p-4 bg-slate-900/50 border-t border-white/10 backdrop-blur-md">
+            <form onSubmit={handleSubmit} className="relative">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Digite sua mensagem..."
+                className="w-full bg-slate-800/50 text-white placeholder-slate-500 rounded-xl pl-5 pr-12 py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all border border-white/5"
+              />
+              <button
+                type="submit"
+                disabled={isLoading || !input.trim()}
+                className="absolute right-2 top-2 p-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-indigo-500/20"
+              >
+                <Send className="w-5 h-5" />
+              </button>
+            </form>
+          </div>
         </div>
-      )}
-    </>
+      </div>
+    </section>
   );
-};
-
-export default AgentDemo;
+}
