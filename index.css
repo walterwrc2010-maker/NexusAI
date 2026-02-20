@@ -2,31 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-  }
- 
-  body {
-    @apply bg-slate-950 text-slate-50 antialiased selection:bg-indigo-500/30 selection:text-indigo-200;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
+/* Reset mínimo e base escura */
+:root {
+  color-scheme: dark;
 }
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  @apply bg-slate-950 text-slate-100 antialiased;
+}
+
+/* IMPORTANTE:
+   Se o seu projeto tinha regras globais tipo * { border: ... }
+   elas morrem aqui porque você vai substituir o arquivo inteiro.
+*/
 
 @layer utilities {
   .glass {
     @apply bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-xl;
   }
-  
+
   .glass-hover {
     @apply hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300;
   }
 
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400;
+  }
+
+  /* Stitch Utilities */
+  .glass-panel {
+    @apply backdrop-blur-xl border;
+    background-color: rgba(25, 30, 51, 0.6);
+    border-color: rgba(35, 41, 72, 0.8);
+  }
+
+  .neon-glow {
+    box-shadow: 0 0 20px -5px rgba(19, 55, 236, 0.5);
+  }
+
+  .gradient-text-stitch {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-white to-indigo-300;
+  }
+
+  .chat-pulse::before {
+    content: '';
+    @apply absolute inset-0 rounded-full border-2 border-primary animate-pulse-ring;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-medium transition active:scale-[0.99];
+  }
+
+  .btn-primary {
+    @apply btn bg-indigo-600 text-white hover:bg-indigo-500;
+  }
+
+  .btn-secondary {
+    @apply btn border border-white/10 bg-white/5 text-white hover:bg-white/10;
   }
 }

@@ -1,68 +1,117 @@
 import React from 'react';
-import { Bot, Instagram, Linkedin, Twitter } from 'lucide-react';
+import { Bot, Linkedin, Instagram, Youtube, MessageCircle, Mail, ArrowUpRight, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+const WHATSAPP_NUMBER = '5511999999999';
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Olá! Vim pelo site da NexusAI e gostaria de saber mais. 🚀')}`;
+
+const currentYear = new Date().getFullYear();
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-950 border-t border-white/10 pt-16 pb-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+    <footer className="border-t border-border-dark bg-background-dark pt-14 pb-8 px-6 mt-auto">
+      <div className="max-w-7xl mx-auto">
 
-          <div className="col-span-1 md:col-span-1">
-            <a href="#" className="flex items-center gap-2 mb-4 group">
-              <div className="p-2 rounded-lg bg-indigo-600/20">
-                <Bot className="w-6 h-6 text-indigo-400" />
+        {/* Main grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+
+          {/* Brand column */}
+          <div className="space-y-5">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 via-primary to-cyan-500 flex items-center justify-center shadow-lg shadow-primary/30">
+                <Bot className="w-4 h-4 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">NexusAI</span>
-            </a>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              Transformando empresas com inteligência artificial e automação de ponta a ponta.
+              <span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-cyan-300">
+                NexusAI
+              </span>
+            </div>
+            <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
+              Automação inteligente com agentes de IA para empresas que querem escalar sem aumentar a equipe.
             </p>
-          </div>
 
-          <div>
-            <h4 className="font-bold text-white mb-4">Soluções</h4>
-            <ul className="space-y-3 text-sm text-slate-400">
-              <li><a href="#" className="hover:text-indigo-400 transition-colors">Agentes de Atendimento</a></li>
-              <li><a href="#" className="hover:text-indigo-400 transition-colors">Automação de Vendas</a></li>
-              <li><a href="#" className="hover:text-indigo-400 transition-colors">Integração CRM</a></li>
-              <li><a href="#" className="hover:text-indigo-400 transition-colors">Consultoria</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-white mb-4">Empresa</h4>
-            <ul className="space-y-3 text-sm text-slate-400">
-              <li><a href="#" className="hover:text-indigo-400 transition-colors">Sobre Nós</a></li>
-              <li><a href="#" className="hover:text-indigo-400 transition-colors">Cases de Sucesso</a></li>
-              <li><a href="#" className="hover:text-indigo-400 transition-colors">Blog</a></li>
-              <li><a href="#" className="hover:text-indigo-400 transition-colors">Contato</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-white mb-4">Social</h4>
-            <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-indigo-600 hover:text-white transition-all">
-                <Instagram className="w-5 h-5" />
+            {/* Social icons */}
+            <div className="flex gap-3">
+              <a href="https://www.linkedin.com/company/nexusai" target="_blank" rel="noopener noreferrer"
+                className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#0A66C2] hover:border-[#0A66C2]/40 hover:bg-[#0A66C2]/10 transition-all">
+                <Linkedin className="w-4 h-4" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-indigo-600 hover:text-white transition-all">
-                <Linkedin className="w-5 h-5" />
+              <a href="https://www.instagram.com/nexusai" target="_blank" rel="noopener noreferrer"
+                className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-pink-400 hover:border-pink-400/40 hover:bg-pink-400/10 transition-all">
+                <Instagram className="w-4 h-4" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-indigo-600 hover:text-white transition-all">
-                <Twitter className="w-5 h-5" />
+              <a href="https://www.youtube.com/@nexusai" target="_blank" rel="noopener noreferrer"
+                className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-red-400 hover:border-red-400/40 hover:bg-red-400/10 transition-all">
+                <Youtube className="w-4 h-4" />
               </a>
             </div>
           </div>
 
+          {/* Navigation */}
+          <div className="space-y-4">
+            <h4 className="text-white font-bold text-sm uppercase tracking-wider">Navegação</h4>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <Link to="/" className="text-gray-400 hover:text-white transition-colors flex items-center gap-1.5 group">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/chat" className="text-gray-400 hover:text-white transition-colors flex items-center gap-1.5 group">
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                  Agente Demo
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-gray-400 hover:text-white transition-colors flex items-center gap-1.5">
+                  Solicitar Contato
+                </Link>
+              </li>
+              <li>
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-green-400 transition-colors flex items-center gap-1.5">
+                  <MessageCircle className="w-3.5 h-3.5 text-green-400" />
+                  WhatsApp Direto
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div className="space-y-4">
+            <h4 className="text-white font-bold text-sm uppercase tracking-wider">Contato Rápido</h4>
+            <div className="space-y-3">
+              <a href="mailto:contato@nexusai.com.br"
+                className="flex items-center gap-3 text-sm text-gray-400 hover:text-white transition-colors group">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
+                  <Mail className="w-4 h-4 text-primary" />
+                </div>
+                contato@nexusai.com.br
+              </a>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-3 text-sm text-gray-400 hover:text-green-400 transition-colors group">
+                <div className="w-8 h-8 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center shrink-0 group-hover:bg-green-500/20 transition-colors">
+                  <MessageCircle className="w-4 h-4 text-green-400" />
+                </div>
+                Chamar no WhatsApp
+              </a>
+              <Link to="/contact"
+                className="flex items-center gap-3 text-sm text-gray-400 hover:text-indigo-400 transition-colors group">
+                <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0 group-hover:bg-indigo-500/20 transition-colors">
+                  <ArrowUpRight className="w-4 h-4 text-indigo-400" />
+                </div>
+                Solicitar consultoria grátis
+              </Link>
+            </div>
+          </div>
         </div>
 
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-slate-500 text-sm">
-            © {new Date().getFullYear()} NexusAI. Todos os direitos reservados.
-          </p>
-          <div className="flex gap-6 text-sm text-slate-500">
-            <a href="#" className="hover:text-slate-300 transition-colors">Privacidade</a>
-            <a href="#" className="hover:text-slate-300 transition-colors">Termos</a>
+        {/* Bottom bar */}
+        <div className="pt-8 border-t border-border-dark flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-600">
+          <p>© {currentYear} NexusAI. Todos os direitos reservados.</p>
+          <div className="flex items-center gap-1 text-gray-600">
+            <span>Feito com</span>
+            <Sparkles className="w-3 h-3 text-indigo-400" />
+            <span>e automação</span>
           </div>
         </div>
       </div>

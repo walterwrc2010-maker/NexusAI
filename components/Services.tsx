@@ -1,71 +1,72 @@
 import React from 'react';
-import { Bot, Zap, TrendingUp, ArrowUpRight } from 'lucide-react';
+import { Headset, Network, TrendingUp, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Services() {
-  const services = [
+  const solutions = [
     {
-      icon: <Bot className="w-8 h-8 text-indigo-400" />,
-      title: "Agentes de Atendimento",
-      description: "IA que responde WhatsApp e Instagram 24/7, tira dúvidas e qualifica leads instantaneamente.",
-      gradient: "from-indigo-500/10 to-blue-500/10",
-      border: "hover:border-indigo-500/30"
+      icon: <Headset className="w-6 h-6" />,
+      title: "Agentes de Suporte AI",
+      description: "Atendimento 24/7 com raciocínio contextual, empatia programada e resolução automática de tickets complexos sem intervenção humana.",
+      cta: "Saiba mais",
+      color: "group-hover:bg-primary",
+      textColor: "text-primary",
+      blobColor: "bg-primary/5"
     },
     {
-      icon: <Zap className="w-8 h-8 text-amber-400" />,
-      title: "Automação de Processos",
-      description: "Conecte CRM, planilhas e Slack. Elimine trabalho manual repetitivo da sua equipe.",
-      gradient: "from-amber-500/10 to-orange-500/10",
-      border: "hover:border-amber-500/30"
+      icon: <Network className="w-6 h-6" />,
+      title: "Automações n8n",
+      description: "Integrações robustas entre seus apps favoritos. Conecte CRM, ERP e ferramentas de marketing em fluxos de trabalho invisíveis e eficientes.",
+      cta: "Explorar Workflows",
+      color: "group-hover:bg-purple-600",
+      textColor: "text-purple-400",
+      blobColor: "bg-purple-500/5"
     },
     {
-      icon: <TrendingUp className="w-8 h-8 text-emerald-400" />,
-      title: "Growth & Vendas",
-      description: "Recuperação de carrinho, follow-up automático e agendamento de reuniões sem intervenção humana.",
-      gradient: "from-emerald-500/10 to-green-500/10",
-      border: "hover:border-emerald-500/30"
+      icon: <TrendingUp className="w-6 h-6" />,
+      title: "Agentes de Vendas (SDR)",
+      description: "SDRs autônomos que prospectam, qualificam leads e agendam reuniões automaticamente no seu calendário, aumentando seu pipeline.",
+      cta: "Ver Demo",
+      color: "group-hover:bg-cyan-600",
+      textColor: "text-cyan-400",
+      blobColor: "bg-cyan-500/5"
     }
   ];
 
   return (
-    <section id="services" className="py-24 bg-slate-950 relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-900/10 rounded-full blur-[120px] -z-10" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400 mb-6">
-            Poder computacional <br /> para seu negócio
-          </h2>
-          <p className="text-slate-400 max-w-2xl mx-auto text-lg">
-            Nossos agentes digitais trabalham incansavelmente para escalar sua operação com precisão e velocidade humana.
+    <section className="py-20 px-6 max-w-7xl mx-auto w-full" id="services">
+      <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+        <div>
+          <h2 className="text-3xl font-bold text-white mb-4">Nossas Soluções</h2>
+          <p className="text-gray-400 max-w-lg">
+            Potencialize sua empresa com tecnologia de ponta. De agentes de suporte que nunca dormem a vendedores autônomos.
           </p>
         </div>
+        <a href="#" className="text-primary hover:text-primary-light font-bold flex items-center gap-1 transition-colors">
+          Ver todas as soluções
+          <ArrowRight className="w-5 h-5" />
+        </a>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className={`group relative p-8 rounded-3xl bg-white/[0.02] border border-white/5 ${service.border} transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:bg-white/[0.04]`}
-            >
-              <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 rounded-3xl transition-opacity duration-500`} />
+      <div className="grid md:grid-cols-3 gap-6">
+        {solutions.map((item, index) => (
+          <div key={index} className="group relative bg-surface-dark border border-border-dark rounded-xl p-8 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10 overflow-hidden">
+            <div className={`absolute top-0 right-0 w-32 h-32 ${item.blobColor} rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110`}></div>
 
-              <div className="relative z-10">
-                <div className="p-3 bg-white/5 rounded-xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
-                  {service.icon}
-                </div>
-
-                <h3 className="text-xl font-bold text-white mb-3 flex items-center justify-between">
-                  {service.title}
-                  <ArrowUpRight className="w-5 h-5 text-slate-500 group-hover:text-white transition-colors opacity-0 group-hover:opacity-100" />
-                </h3>
-
-                <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
-                  {service.description}
-                </p>
-              </div>
+            <div className={`w-12 h-12 rounded-lg bg-border-dark flex items-center justify-center mb-6 ${item.color} group-hover:text-white transition-colors text-gray-300`}>
+              {item.icon}
             </div>
-          ))}
-        </div>
+
+            <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+            <p className="text-gray-400 text-sm leading-relaxed mb-6">
+              {item.description}
+            </p>
+
+            <div className={`flex items-center gap-2 text-xs font-bold ${item.textColor} uppercase tracking-wider group-hover:translate-x-1 transition-transform`}>
+              {item.cta} <ArrowRight className="w-4 h-4" />
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

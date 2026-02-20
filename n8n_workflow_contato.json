@@ -1,0 +1,138 @@
+{
+    "name": "NexusAI — Contato Automático (WhatsApp + Email)",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "nexusai-contato",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "webhook-trigger",
+            "name": "Webhook — Formulário de Contato",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2,
+            "position": [
+                240,
+                300
+            ],
+            "webhookId": "nexusai-contato"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "=http://localhost:8080/message/sendText/{{$json[\"instance\"]}}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "SEU_TOKEN_EVOLUTION_API"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "number",
+                            "value": "={{$node[\"Webhook — Formulário de Contato\"].json[\"body\"][\"phone\"].replace(/\\D/g, '')}}"
+                        },
+                        {
+                            "name": "text",
+                            "value": "=Olá, *{{$node[\"Webhook — Formulário de Contato\"].json[\"body\"][\"name\"]}}*! 👋\n\nObrigado pelo interesse na *NexusAI*! Recebemos seu contato e um dos nossos consultores entrará em contato em breve.\n\nEnquanto isso, acesse nosso site: https://nexusai.com.br\n\n_Equipe NexusAI_ 🚀"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "whatsapp-send",
+            "name": "WhatsApp — Enviar Mensagem",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                540,
+                180
+            ]
+        },
+        {
+            "parameters": {
+                "fromEmail": "contato@nexusai.com.br",
+                "toEmail": "={{$node[\"Webhook — Formulário de Contato\"].json[\"body\"][\"email\"]}}",
+                "subject": "✅ Recebemos seu contato — NexusAI",
+                "emailType": "html",
+                "message": "=<!DOCTYPE html>\n<html>\n<body style=\"font-family: Arial, sans-serif; background: #0b0f1a; color: #e2e8f0; padding: 40px;\">\n  <div style=\"max-width: 560px; margin: 0 auto; background: #1e2439; border-radius: 16px; padding: 40px;\">\n    <h1 style=\"color: #6366f1; margin-bottom: 8px;\">Olá, {{$node[\"Webhook — Formulário de Contato\"].json[\"body\"][\"name\"]}}! 👋</h1>\n    <p style=\"color: #94a3b8; font-size: 16px; line-height: 1.6;\">\n      Obrigado pelo seu interesse na <strong style=\"color: #fff;\">NexusAI</strong>.\n      Recebemos seu pedido de contato e nossa equipe de consultores entrará em contato em breve.\n    </p>\n    <hr style=\"border-color: rgba(255,255,255,0.1); margin: 24px 0;\" />\n    <p style=\"color: #64748b; font-size: 13px;\">Dados recebidos:</p>\n    <ul style=\"color: #94a3b8; font-size: 14px; padding-left: 20px;\">\n      <li>Nome: <strong>{{$node[\"Webhook — Formulário de Contato\"].json[\"body\"][\"name\"]}}</strong></li>\n      <li>Email: {{$node[\"Webhook — Formulário de Contato\"].json[\"body\"][\"email\"]}}</li>\n      <li>WhatsApp: {{$node[\"Webhook — Formulário de Contato\"].json[\"body\"][\"phone\"]}}</li>\n    </ul>\n    <div style=\"margin-top: 32px; text-align: center;\">\n      <a href=\"https://nexusai.com.br\" style=\"background: #6366f1; color: white; padding: 14px 32px; border-radius: 10px; text-decoration: none; font-weight: bold;\">Visitar NexusAI →</a>\n    </div>\n    <p style=\"color: #475569; font-size: 12px; text-align: center; margin-top: 32px;\">Equipe NexusAI • contato@nexusai.com.br</p>\n  </div>\n</body>\n</html>",
+                "options": {}
+            },
+            "id": "email-send",
+            "name": "Email — Confirmação ao Cliente",
+            "type": "n8n-nodes-base.emailSend",
+            "typeVersion": 2.1,
+            "position": [
+                540,
+                420
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={ \"status\": \"ok\", \"message\": \"Contato recebido com sucesso\" }",
+                "options": {}
+            },
+            "id": "webhook-response",
+            "name": "Resposta — OK",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                820,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook — Formulário de Contato": {
+            "main": [
+                [
+                    {
+                        "node": "WhatsApp — Enviar Mensagem",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Email — Confirmação ao Cliente",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "WhatsApp — Enviar Mensagem": {
+            "main": [
+                [
+                    {
+                        "node": "Resposta — OK",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Email — Confirmação ao Cliente": {
+            "main": [
+                [
+                    {
+                        "node": "Resposta — OK",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "meta": {
+        "templateCredsSetupCompleted": false
+    }
+}

@@ -1,12 +1,7 @@
 import React, { useEffect } from 'react';
 import Hero from '../components/Hero';
-import SocialProof from '../components/SocialProof';
 import Services from '../components/Services';
-import AboutAgents from '../components/AboutAgents';
-import Process from '../components/Process';
-import Testimonials from '../components/Testimonials';
-import FAQ from '../components/FAQ';
-import { MessageCircle } from 'lucide-react';
+import Comparison from '../components/Comparison';
 
 export default function Home() {
     useEffect(() => {
@@ -16,39 +11,33 @@ export default function Home() {
     return (
         <div className="animate-in fade-in duration-500">
             <Hero />
-            <SocialProof />
             <Services />
-            <AboutAgents />
-            <Process />
-            <Testimonials />
-            <FAQ />
+            <Comparison />
 
-            {/* CTA Final (Moved from App.tsx) */}
-            <section id="cta-final" className="py-24 bg-slate-950 border-t border-white/5 relative overflow-hidden">
-                {/* Background Glow */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-600/10 rounded-full blur-[120px] -z-10" />
+            {/* CTA Final */}
+            <section className="py-20 px-6 max-w-5xl mx-auto text-center w-full">
+                <div className="relative bg-surface-dark border border-border-dark rounded-2xl p-12 overflow-hidden">
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+                    <div className="absolute -top-24 -left-24 w-64 h-64 bg-primary/20 rounded-full blur-[80px]"></div>
+                    <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-cyan-500/20 rounded-full blur-[80px]"></div>
 
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                    <h2 className="text-4xl md:text-6xl font-extrabold leading-tight text-white mb-8">
-                        A revolução não espera. <br />
-                        Sua <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400">automação</span> começa aqui.
-                    </h2>
+                    <div className="relative z-10 flex flex-col items-center gap-6">
+                        <h2 className="text-3xl md:text-4xl font-bold text-white">Pronto para o futuro da automação?</h2>
+                        <p className="text-gray-400 max-w-lg text-lg">
+                            Junte-se a centenas de empresas que já estão economizando tempo e dinheiro com NexusAI.
+                        </p>
 
-                    <p className="text-slate-400 mt-6 text-lg leading-relaxed mb-10">
-                        Agende uma consultoria estratégica gratuita e descubra como a NexusAI pode economizar centenas de horas
-                        na sua empresa todos os meses através de Agentes e Automações.
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a
-                            href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Quero%20agendar%20um%20diagn%C3%B3stico%20gratuito%20com%20a%20NexusAI."
-                            target="_blank"
-                            rel="noreferrer"
-                            className="px-8 py-4 rounded-xl bg-green-600 hover:bg-green-500 text-white font-bold text-lg transition-all shadow-lg shadow-green-500/25 flex items-center gap-2"
-                        >
-                            <MessageCircle className="w-5 h-5 fill-white" />
-                            Agendar Diagnóstico Gratuito
-                        </a>
+                        <div className="flex flex-col sm:flex-row gap-4 w-full justify-center mt-4">
+                            <input
+                                type="email"
+                                placeholder="seu@email.com"
+                                className="bg-background-dark border border-border-dark text-white rounded px-4 py-3 min-w-[280px] focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                            />
+                            <button className="bg-primary hover:bg-primary-light text-white font-bold py-3 px-8 rounded shadow-lg shadow-primary/25 transition-all">
+                                Começar Agora
+                            </button>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">No credit card required for demo. Free 14-day trial.</p>
                     </div>
                 </div>
             </section>

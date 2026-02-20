@@ -1,105 +1,102 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Bot, ChevronRight, MessageCircle } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, Bot, ArrowRight } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Helper to handle anchor links on different pages
-  const getLink = (href: string) => {
-    if (href.startsWith('#')) {
-      return location.pathname === '/' ? href : `/${href}`;
-    }
-    return href;
-  };
-
   const navLinks = [
-    { name: 'Soluções', href: '/#services' },
-    { name: 'Agentes', href: '/#about-agents' },
-    { name: 'Processo', href: '/#process' },
-    { name: 'Depoimentos', href: '/#testimonials' },
+    { name: 'Serviços', href: '/#services' },
+    { name: 'Agentes', href: '/#agents' },
+    { name: 'Cases', href: '/#cases' },
+    { name: 'Contato', href: '/contact' },
   ];
 
+  const handleNavClick = (href: string) => {
+    setIsOpen(false);
+    if (href.startsWith('/#')) {
+      const sectionId = href.replace('/#', '');
+      if (location.pathname !== '/') {
+        navigate('/');
+        setTimeout(() => document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' }), 300);
+      } else {
+        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate(href);
+    }
+  };
+
+  const handleLogoClick = () => {
+    if (location.pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      navigate('/');
+    }
+  };
+
   return (
-    <nav
-      className={cn(
-        "fixed w-full z-50 transition-all duration-300 border-b border-transparent",
-        scrolled ? "bg-slate-950/80 backdrop-blur-md border-white/10 py-4" : "bg-transparent py-6"
-      )}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
-
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 group-hover:scale-105 transition-transform duration-300 shadow-lg shadow-indigo-500/20">
-              <Bot className="w-6 h-6 text-white" />
-              <div className="absolute inset-0 rounded-xl bg-white/20 blur-sm opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400 group-hover:to-white transition-all">
-              NexusAI
-            </span>
-          </Link>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-8">
-            <Link
-              to="/chat"
-              className="px-4 py-2 rounded-lg bg-indigo-500/10 border border-indigo-500/30 hover:bg-indigo-500/20 hover:border-indigo-500/50 text-indigo-300 font-semibold transition-all shadow-[0_0_15px_rgba(99,102,241,0.3)] hover:shadow-[0_0_20px_rgba(99,102,241,0.5)] flex items-center gap-2"
-            >
-              <Bot className="w-4 h-4" />
-              CHAT DEMO
-            </Link>
-
-            <Link
-              to="/leads"
-              className="text-sm font-medium text-slate-400 hover:text-white transition-colors relative group"
-            >
-              Contato
-              <span className="absolute -bottom-1 left-0 w-0 h-px bg-indigo-500 transition-all duration-300 group-hover:w-full" />
-            </Link>
-
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-sm font-medium text-slate-400 hover:text-white transition-colors relative group"
-              >
-                {link.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-indigo-500 transition-all duration-300 group-hover:w-full" />
-              </a>
-            ))}
-
-            <a
-              href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20a%20NexusAI."
-              target="_blank"
-              rel="noreferrer"
-              className="px-5 py-2.5 rounded-lg bg-green-600 hover:bg-green-500 text-white text-sm font-bold transition-all flex items-center gap-2 group shadow-lg shadow-green-500/20"
-            >
-              <MessageCircle className="w-4 h-4 fill-white text-white" />
-              Agendar Diagnóstico
-            </a>
+    <nav className={cn(
+      "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
+      scrolled ? "glass-panel border-border-dark" : "bg-transparent border-transparent py-4"
+    )}>
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        {/* Logo — volta ao topo */}
+        <button
+          onClick={handleLogoClick}
+          className="flex items-center gap-3 text-white cursor-pointer hover:opacity-90 transition-opacity"
+        >
+          <div className="relative w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-500 via-primary to-cyan-500 flex items-center justify-center shadow-lg shadow-primary/40">
+            <Bot className="w-5 h-5 text-white" />
+            <span className="absolute inset-0 rounded-lg bg-gradient-to-br from-indigo-500 via-primary to-cyan-500 blur-md opacity-50 -z-10"></span>
           </div>
+          <span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-cyan-300 drop-shadow-sm">
+            NexusAI
+          </span>
+        </button>
 
-          {/* Mobile Button */}
+
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <button
+              key={link.name}
+              onClick={() => handleNavClick(link.href)}
+              className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
+            >
+              {link.name}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-4">
+          {/* Mobile Menu Button */}
           <button
+            className="md:hidden text-gray-300 hover:text-white"
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
+
+          {/* Get Started → Contact page */}
+          <Link
+            to="/contact"
+            className="hidden md:flex bg-primary hover:bg-primary-light text-white text-sm font-bold h-9 px-5 rounded transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 items-center gap-2"
+          >
+            <span>Começar Agora</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
 
@@ -110,45 +107,28 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-slate-950/95 backdrop-blur-xl border-b border-white/10 overflow-hidden"
+            className="md:hidden glass-panel border-b border-border-dark overflow-hidden"
           >
-            <div className="px-4 py-8 space-y-4">
-              <Link
-                to="/chat"
-                onClick={() => setIsOpen(false)}
-                className="block text-lg font-bold text-indigo-400 hover:text-indigo-300 hover:pl-2 transition-all"
-              >
-                CHAT DEMO ✨
-              </Link>
-              <Link
-                to="/leads"
-                onClick={() => setIsOpen(false)}
-                className="block text-lg font-medium text-slate-400 hover:text-white hover:pl-2 transition-all"
-              >
-                Contato / Leads
-              </Link>
-
+            <div className="px-6 py-6 space-y-4 flex flex-col items-start">
               {navLinks.map((link) => (
-                <a
+                <button
                   key={link.name}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="block text-lg font-medium text-slate-400 hover:text-white hover:pl-2 transition-all"
+                  onClick={() => handleNavClick(link.href)}
+                  className="block text-lg font-medium text-gray-300 hover:text-white transition-colors w-full text-left"
                 >
                   {link.name}
-                </a>
+                </button>
               ))}
-              <hr className="border-white/10" />
-              <a
-                href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20a%20NexusAI."
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => setIsOpen(false)}
-                className="flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-green-600 text-white font-bold hover:bg-green-500 transition-colors shadow-lg shadow-green-500/20"
-              >
-                <MessageCircle className="w-5 h-5 fill-white text-white" />
-                Agendar Diagnóstico
-              </a>
+              <div className="pt-4 w-full">
+                <Link
+                  to="/contact"
+                  onClick={() => setIsOpen(false)}
+                  className="w-full bg-primary hover:bg-primary-light text-white text-sm font-bold h-10 px-5 rounded transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 flex items-center justify-center gap-2"
+                >
+                  <span>Começar Agora</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}
