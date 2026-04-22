@@ -1,15 +1,16 @@
 import React from 'react';
-import { Bot, Linkedin, Instagram, Youtube, MessageCircle, Mail, ArrowUpRight, Sparkles } from 'lucide-react';
+import { Bot, Linkedin, Instagram, Youtube, Mail, ArrowUpRight, Sparkles } from 'lucide-react';
+import WhatsAppIcon from './WhatsAppIcon';
 import { Link } from 'react-router-dom';
 
-const WHATSAPP_NUMBER = '5511999999999';
+const WHATSAPP_NUMBER = '5511939105566';
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Olá! Vim pelo site da NexusAI e gostaria de saber mais. 🚀')}`;
 
 const currentYear = new Date().getFullYear();
 
 export default function Footer() {
   return (
-    <footer className="border-t border-border-dark bg-background-dark pt-14 pb-8 px-6 mt-auto">
+    <footer className="border-t border-border-subtle bg-background-dark pt-14 pb-8 px-6 mt-auto">
       <div className="max-w-7xl mx-auto">
 
         {/* Main grid */}
@@ -69,7 +70,7 @@ export default function Footer() {
               <li>
                 <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"
                   className="text-gray-400 hover:text-green-400 transition-colors flex items-center gap-1.5">
-                  <MessageCircle className="w-3.5 h-3.5 text-green-400" />
+                  <WhatsAppIcon className="w-3.5 h-3.5 text-green-400" />
                   WhatsApp Direto
                 </a>
               </li>
@@ -90,7 +91,7 @@ export default function Footer() {
               <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-3 text-sm text-gray-400 hover:text-green-400 transition-colors group">
                 <div className="w-8 h-8 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center shrink-0 group-hover:bg-green-500/20 transition-colors">
-                  <MessageCircle className="w-4 h-4 text-green-400" />
+                  <WhatsAppIcon className="w-4 h-4 text-green-400" />
                 </div>
                 Chamar no WhatsApp
               </a>
@@ -106,7 +107,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 border-t border-border-dark flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-600">
+        <div className="pt-8 border-t border-border-subtle flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-600">
           <p>© {currentYear} NexusAI. Todos os direitos reservados.</p>
           <div className="flex items-center gap-1 text-gray-600">
             <span>Feito com</span>

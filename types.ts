@@ -3,7 +3,7 @@ export interface Service {
   id: string;
   title: string;
   description: string;
-  icon: React.ReactNode;
+  icon: import('react').ReactNode;
   tags: string[];
 }
 

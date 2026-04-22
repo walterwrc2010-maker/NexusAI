@@ -66,13 +66,14 @@ const profiles = [
     },
 ];
 
-const accentMap: Record<string, { border: string; bg: string; tab: string; badge: string; check: string }> = {
+const accentMap: Record<string, { border: string; bg: string; tab: string; badge: string; check: string; btn: string }> = {
     sky: {
         border: 'border-sky-500/30',
         bg: 'bg-sky-500/5',
         tab: 'bg-sky-600 text-white',
         badge: 'bg-sky-500/10 border-sky-500/30 text-sky-300',
         check: 'text-sky-400',
+        btn: 'bg-sky-600 hover:bg-sky-500',
     },
     violet: {
         border: 'border-violet-500/30',
@@ -80,6 +81,7 @@ const accentMap: Record<string, { border: string; bg: string; tab: string; badge
         tab: 'bg-violet-600 text-white',
         badge: 'bg-violet-500/10 border-violet-500/30 text-violet-300',
         check: 'text-violet-400',
+        btn: 'bg-violet-600 hover:bg-violet-500',
     },
     indigo: {
         border: 'border-indigo-500/30',
@@ -87,6 +89,7 @@ const accentMap: Record<string, { border: string; bg: string; tab: string; badge
         tab: 'bg-indigo-600 text-white',
         badge: 'bg-indigo-500/10 border-indigo-500/30 text-indigo-300',
         check: 'text-indigo-400',
+        btn: 'bg-indigo-600 hover:bg-indigo-500',
     },
 };
 
@@ -96,11 +99,11 @@ export default function Comparison() {
     const colors = accentMap[p.accent];
 
     return (
-        <section className="py-20 bg-surface-dark/30 border-y border-border-dark" id="como-funciona">
+        <section className="py-20 bg-surface-dark/20 border-y border-border-subtle" id="como-funciona">
             <div className="max-w-4xl mx-auto px-6">
                 {/* Header */}
                 <div className="text-center mb-12">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold uppercase tracking-wider mb-4">
+                    <div className="section-badge-amber mb-4">
                         <Lightbulb className="w-3.5 h-3.5" />
                         Qual solução é a certa para mim?
                     </div>
@@ -145,7 +148,7 @@ export default function Comparison() {
 
                             <Link
                                 to={p.cta.to}
-                                className={`inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-${p.accent}-600 hover:bg-${p.accent}-500 text-white font-bold text-sm transition-all`}
+                                className={`inline-flex items-center gap-2 h-11 px-6 rounded-xl text-white font-bold text-sm transition-all ${colors.btn}`}
                             >
                                 {p.cta.label} <ArrowRight className="w-4 h-4" />
                             </Link>

@@ -2,75 +2,198 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Reset mínimo e base escura */
+/* ── Variáveis ──────────────────────────────────────────────── */
 :root {
   color-scheme: dark;
+  --primary:       #6366f1;
+  --primary-light: #818cf8;
+  --primary-glow:  rgba(99, 102, 241, 0.38);
+  --gold:          #e2e8f0;
+  --gold-glow:     rgba(226, 232, 240, 0.25);
+  --teal-glow:     rgba(34, 211, 238, 0.32);
+  --bg:            #07070e;
+  --surface:       #0b0b18;
 }
 
-html,
-body,
-#root {
-  height: 100%;
+/* ── Base ───────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
+
+html, body, #root { height: 100%; }
 
 body {
   margin: 0;
-  @apply bg-slate-950 text-slate-100 antialiased;
+  background: var(--bg);
+  @apply text-foreground antialiased;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
 }
 
-/* IMPORTANTE:
-   Se o seu projeto tinha regras globais tipo * { border: ... }
-   elas morrem aqui porque você vai substituir o arquivo inteiro.
-*/
+/* Seleção */
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: #fff;
+}
 
+/* ── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar              { width: 5px; height: 5px; }
+::-webkit-scrollbar-track        { background: var(--bg); }
+::-webkit-scrollbar-thumb        { background: #1e2048; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover  { background: #2e3270; }
+
+.scrollbar-thin::-webkit-scrollbar       { width: 3px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 99px; }
+
+/* ── Utilities ──────────────────────────────────────────────── */
 @layer utilities {
+
+  /* Glass */
   .glass {
-    @apply bg-white/[0.03] backdrop-blur-md border border-white/10 shadow-xl;
+    @apply bg-white/[0.025] backdrop-blur-md border border-white/[0.06] shadow-card;
   }
-
   .glass-hover {
-    @apply hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300;
+    @apply hover:bg-white/[0.05] hover:border-white/[0.10] transition-all duration-300;
   }
-
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400;
+  .glass-strong {
+    background: rgba(10, 12, 26, 0.82);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
   }
-
-  /* Stitch Utilities */
   .glass-panel {
     @apply backdrop-blur-xl border;
-    background-color: rgba(25, 30, 51, 0.6);
-    border-color: rgba(35, 41, 72, 0.8);
+    background-color: rgba(7, 9, 26, 0.88);
+    border-color: rgba(30, 32, 72, 0.9);
   }
 
-  .neon-glow {
-    box-shadow: 0 0 20px -5px rgba(19, 55, 236, 0.5);
+  /* Gradientes de texto */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary-light to-teal;
   }
-
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-light;
+  }
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #cbd5e1 0%, #f1f5f9 50%, #cbd5e1 100%);
+  }
+  .text-gradient-hero {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #818cf8 0%, #22d3ee 100%);
+  }
   .gradient-text-stitch {
-    @apply bg-clip-text text-transparent bg-gradient-to-br from-white to-indigo-300;
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-white to-primary-light;
   }
 
+  /* Glows */
+  .neon-glow        { box-shadow: 0 0 24px -4px var(--primary-glow); }
+  .neon-glow-gold   { box-shadow: 0 0 24px -4px var(--gold-glow); }
+  .neon-glow-teal   { box-shadow: 0 0 24px -4px var(--teal-glow); }
+
+  /* Borda dourada sutil */
+  .border-gradient-gold {
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+  }
+  .border-gradient-gold::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(226,232,240,0.3), rgba(99,102,241,0.3));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Shimmer */
+  .shimmer {
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+    background-size: 200% 100%;
+    @apply animate-shimmer;
+  }
+
+  /* Ring de pulse */
   .chat-pulse::before {
     content: '';
     @apply absolute inset-0 rounded-full border-2 border-primary animate-pulse-ring;
   }
+
+  /* Status dot */
+  .status-online {
+    @apply w-2 h-2 rounded-full bg-emerald-400;
+    box-shadow: 0 0 7px 1px rgba(52, 211, 153, 0.6);
+  }
+
+  /* Fade masks */
+  .fade-mask-b { mask-image: linear-gradient(to bottom, black 65%, transparent 100%); }
+  .fade-mask-t { mask-image: linear-gradient(to top, black 65%, transparent 100%); }
 }
 
+/* ── Components ─────────────────────────────────────────────── */
 @layer components {
-  .container-page {
-    @apply mx-auto w-full max-w-6xl px-4;
-  }
 
-  .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-medium transition active:scale-[0.99];
-  }
+  .container-page { @apply mx-auto w-full max-w-6xl px-4; }
+
+  /* Botões */
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 active:scale-[0.98]; }
 
   .btn-primary {
-    @apply btn bg-indigo-600 text-white hover:bg-indigo-500;
+    @apply btn bg-primary text-white hover:bg-primary-light;
+    box-shadow: 0 0 22px -4px rgba(99,102,241,0.5);
+  }
+  .btn-primary:hover {
+    box-shadow: 0 0 32px -4px rgba(99,102,241,0.7);
+  }
+
+  .btn-gold {
+    @apply btn text-background font-bold;
+    background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 100%);
+    box-shadow: 0 0 20px -4px rgba(226,232,240,0.3);
   }
 
   .btn-secondary {
-    @apply btn border border-white/10 bg-white/5 text-white hover:bg-white/10;
+    @apply btn border border-border-dark bg-white/[0.04] text-foreground hover:bg-surface-hover hover:border-white/20;
+  }
+  .btn-ghost {
+    @apply btn text-foreground/60 hover:text-foreground hover:bg-white/[0.05];
+  }
+
+  /* Badges de seção */
+  .section-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold uppercase tracking-wider;
+  }
+  .section-badge-primary {
+    @apply section-badge bg-primary/10 border-primary/25 text-primary-light;
+  }
+  .section-badge-gold {
+    @apply section-badge;
+    background: rgba(226,232,240,0.06);
+    border-color: rgba(226,232,240,0.2);
+    color: #e2e8f0;
+  }
+  .section-badge-teal {
+    @apply section-badge bg-teal/10 border-teal/25 text-teal-light;
+  }
+  .section-badge-indigo {
+    @apply section-badge bg-primary/10 border-primary/25 text-primary-light;
+  }
+  .section-badge-violet {
+    @apply section-badge bg-primary/10 border-primary/25 text-primary-light;
+  }
+  .section-badge-cyan {
+    @apply section-badge bg-teal/10 border-teal/25 text-teal-light;
+  }
+  .section-badge-amber {
+    @apply section-badge-gold;
+  }
+  .section-badge-green {
+    @apply section-badge bg-emerald-500/10 border-emerald-500/25 text-emerald-300;
   }
 }

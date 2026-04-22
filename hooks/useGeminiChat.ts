@@ -1,8 +1,6 @@
 import { useState } from 'react';
-import { GeminiService } from '../services/geminiService';
+import { generateGeminiResponse } from '../services/geminiService';
 import { ChatMessage } from '../types';
-
-const geminiService = new GeminiService();
 
 export function useGeminiChat() {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -19,9 +17,11 @@ export function useGeminiChat() {
         setIsLoading(true);
 
         try {
-            // Create a temporary history for the service call
-            const history = [...messages, userMessage];
-            const response = await geminiService.generateResponse(history);
+            const history = [...messages, userMessage].map(m => ({
+                role: m.role as 'user' | 'model',
+                text: m.content,
+            }));
+            const response = await generateGeminiResponse(content, history);
 
             const botMessage: ChatMessage = {
                 id: (Date.now() + 1).toString(),

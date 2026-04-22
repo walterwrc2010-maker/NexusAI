@@ -56,7 +56,8 @@ export default function ChatPage() {
                 content: responseText,
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             }]);
-        } catch {
+        } catch (err) {
+            console.error('[NexusAI] Erro Gemini:', err);
             setMessages(prev => [...prev, {
                 id: (Date.now() + 1).toString(),
                 role: 'agent',

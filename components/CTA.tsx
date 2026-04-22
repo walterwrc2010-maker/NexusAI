@@ -1,80 +1,119 @@
 import React from 'react';
-import { Linkedin, Instagram, Youtube, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Clock, Shield, Headset, Linkedin, Instagram, Youtube } from 'lucide-react';
+import WhatsAppIcon from './WhatsAppIcon';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-// ⚙️ Configure seus links de redes sociais aqui
+const WHATSAPP_NUMBER = '5511939105566';
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Olá! Quero agendar uma consultoria com a NexusAI. 🚀')}`;
+
 const SOCIAL_LINKS = {
     linkedin: 'https://www.linkedin.com/company/nexusai',
     instagram: 'https://www.instagram.com/nexusai',
     youtube: 'https://www.youtube.com/@nexusai',
 };
 
-const socials = [
-    {
-        name: 'LinkedIn',
-        url: SOCIAL_LINKS.linkedin,
-        icon: Linkedin,
-        label: 'Seguir no LinkedIn',
-        color: 'hover:border-[#0A66C2]/60 hover:bg-[#0A66C2]/10 hover:text-[#0A66C2]',
-        iconColor: 'text-[#0A66C2]',
-    },
-    {
-        name: 'Instagram',
-        url: SOCIAL_LINKS.instagram,
-        icon: Instagram,
-        label: 'Seguir no Instagram',
-        color: 'hover:border-pink-500/60 hover:bg-pink-500/10 hover:text-pink-400',
-        iconColor: 'text-pink-400',
-    },
-    {
-        name: 'YouTube',
-        url: SOCIAL_LINKS.youtube,
-        icon: Youtube,
-        label: 'Inscreva-se no YouTube',
-        color: 'hover:border-red-500/60 hover:bg-red-500/10 hover:text-red-400',
-        iconColor: 'text-red-400',
-    },
+const trustPills = [
+    { icon: Clock, label: 'Setup em 48h' },
+    { icon: Shield, label: 'Sem contrato mínimo' },
+    { icon: Headset, label: 'Suporte incluído' },
 ];
 
 export default function CTA() {
     return (
-        <section className="py-20 px-6 max-w-5xl mx-auto text-center w-full">
-            <div className="relative bg-surface-dark border border-border-dark rounded-2xl p-12 overflow-hidden">
-                {/* Background glow */}
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
-                <div className="absolute -top-24 -left-24 w-64 h-64 bg-primary/20 rounded-full blur-[80px]" />
-                <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-cyan-500/20 rounded-full blur-[80px]" />
+        <section className="py-20 px-6 max-w-5xl mx-auto w-full">
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, ease: 'easeOut' }}
+                className="relative rounded-2xl overflow-hidden border border-primary/20 shadow-[0_0_80px_-20px_rgba(124,101,246,0.22),0_0_120px_-40px_rgba(201,163,74,0.10)]"
+            >
+                {/* Background layers */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#0c0818]/95 via-[#09090f] to-[#07070e]" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(124,101,246,0.18),transparent_55%),radial-gradient(ellipse_at_bottom_right,rgba(201,163,74,0.08),transparent_55%)]" />
+                {/* Subtle grid */}
+                <div
+                    className="absolute inset-0 opacity-[0.04]"
+                    style={{
+                        backgroundImage: 'linear-gradient(rgba(255,255,255,0.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.6) 1px,transparent 1px)',
+                        backgroundSize: '48px 48px',
+                    }}
+                />
 
-                <div className="relative z-10 flex flex-col items-center gap-5">
+                <div className="relative z-10 flex flex-col items-center gap-7 px-8 py-16 text-center">
                     {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary-light text-xs font-bold uppercase tracking-wider">
+                    <div className="section-badge-gold">
                         <Sparkles className="w-3.5 h-3.5" />
-                        Conecte-se à NexusAI
+                        Consultoria Gratuita
                     </div>
 
-                    <h2 className="text-3xl md:text-4xl font-bold text-white max-w-lg">
-                        Fique por dentro das últimas automações e novidades de IA
+                    {/* Headline */}
+                    <h2 className="text-3xl md:text-5xl font-extrabold text-white max-w-2xl leading-[1.1] tracking-tight font-display">
+                        Automatize hoje,{' '}
+                        <span className="text-gradient-hero">
+                            escale amanhã
+                        </span>
                     </h2>
-                    <p className="text-gray-400 max-w-md">
-                        Siga-nos nas redes sociais e receba conteúdo exclusivo sobre automação, n8n, WhatsApp e inteligência artificial.
+
+                    <p className="text-gray-400 max-w-md text-lg leading-relaxed">
+                        Fale com um especialista e descubra como a NexusAI pode reduzir custos operacionais e multiplicar seus resultados em semanas.
                     </p>
 
-                    {/* Social Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full max-w-2xl justify-center">
-                        {socials.map(({ name, url, icon: Icon, label, color, iconColor }) => (
-                            <a
-                                key={name}
-                                href={url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`flex-1 flex items-center justify-center gap-3 h-12 px-6 rounded-xl border border-white/10 bg-white/5 text-gray-300 font-semibold text-sm transition-all duration-200 group ${color}`}
-                            >
-                                <Icon className={`w-5 h-5 shrink-0 ${iconColor}`} />
-                                <span>{label}</span>
-                            </a>
+                    {/* Trust pills */}
+                    <div className="flex flex-wrap justify-center gap-3">
+                        {trustPills.map(({ icon: Icon, label }) => (
+                            <div key={label} className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-300 text-xs font-medium">
+                                <Icon className="w-3.5 h-3.5 text-indigo-400" />
+                                {label}
+                            </div>
                         ))}
                     </div>
+
+                    {/* CTA Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm">
+                        <Link
+                            to="/contact"
+                            className="flex-1 flex items-center justify-center gap-2 h-13 px-7 py-3.5 rounded-xl bg-primary hover:bg-primary-light text-white font-bold text-sm transition-all shadow-neon-primary hover:shadow-[0_0_32px_-4px_rgba(79,107,255,0.8)] group"
+                        >
+                            Falar com Especialista
+                            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                        </Link>
+                        <a
+                            href={WHATSAPP_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 flex items-center justify-center gap-2 h-13 px-7 py-3.5 rounded-xl bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 hover:border-[#25D366]/50 text-[#25D366] font-bold text-sm transition-all"
+                        >
+                            <WhatsAppIcon className="w-4 h-4" />
+                            WhatsApp
+                        </a>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="w-full max-w-xs border-t border-white/5 pt-5 flex flex-col items-center gap-3">
+                        <span className="text-xs text-gray-600 uppercase tracking-wider">Siga nossas redes</span>
+                        <div className="flex items-center gap-3">
+                            {[
+                                { href: SOCIAL_LINKS.linkedin, icon: Linkedin, label: 'LinkedIn', hover: 'hover:text-[#0A66C2] hover:border-[#0A66C2]/40 hover:bg-[#0A66C2]/10' },
+                                { href: SOCIAL_LINKS.instagram, icon: Instagram, label: 'Instagram', hover: 'hover:text-pink-400 hover:border-pink-400/40 hover:bg-pink-400/10' },
+                                { href: SOCIAL_LINKS.youtube, icon: Youtube, label: 'YouTube', hover: 'hover:text-red-400 hover:border-red-400/40 hover:bg-red-400/10' },
+                            ].map(({ href, icon: Icon, label, hover }) => (
+                                <a
+                                    key={label}
+                                    href={href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label={label}
+                                    className={`w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-500 transition-all ${hover}`}
+                                >
+                                    <Icon className="w-4 h-4" />
+                                </a>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </motion.div>
         </section>
     );
 }

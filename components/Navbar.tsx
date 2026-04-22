@@ -49,7 +49,9 @@ export default function Navbar() {
   return (
     <nav className={cn(
       "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
-      scrolled ? "glass-panel border-border-dark" : "bg-transparent border-transparent py-4"
+      scrolled
+        ? "glass-strong border-border-dark shadow-[0_1px_32px_rgba(0,0,0,0.4)]"
+        : "bg-transparent border-transparent py-4"
     )}>
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo — volta ao topo */}
@@ -57,11 +59,11 @@ export default function Navbar() {
           onClick={handleLogoClick}
           className="flex items-center gap-3 text-white cursor-pointer hover:opacity-90 transition-opacity"
         >
-          <div className="relative w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-500 via-primary to-cyan-500 flex items-center justify-center shadow-lg shadow-primary/40">
+          <div className="relative w-9 h-9 rounded-lg bg-gradient-to-br from-primary via-primary-light to-gold flex items-center justify-center shadow-lg shadow-primary/40">
             <Bot className="w-5 h-5 text-white" />
-            <span className="absolute inset-0 rounded-lg bg-gradient-to-br from-indigo-500 via-primary to-cyan-500 blur-md opacity-50 -z-10"></span>
+            <span className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-gold blur-md opacity-40 -z-10"></span>
           </div>
-          <span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-cyan-300 drop-shadow-sm">
+          <span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-primary-light to-gold-light drop-shadow-sm">
             NexusAI
           </span>
         </button>
